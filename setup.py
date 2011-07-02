@@ -2,14 +2,16 @@
 Flask-GAE-Mini-Profiler
 -----------------------
 
-Description goes here...
+A drop-in, ubiquitous, production profiling tool for Google App Engine for
+Flask using `gae_mini_profiler
+<http://bjk5.com/post/6944602865/google-app-engine-mini-profiler>`.
 
 Links
 `````
 
 * `documentation <http://packages.python.org/Flask-GAE-Micro-Profiler>`_
 * `development version
-  <http://github.com/USERNAME/REPOSITORY/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
+  <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
 
 """
 from setuptools import setup
@@ -18,11 +20,11 @@ from setuptools import setup
 setup(
     name='Flask-GAE-Mini-Profiler',
     version='0.1',
-    url='<enter URL here>',
+    url='http://packages.python.org/Flask-GAE-Micro-Profiler',
     license='MIT',
     author='Pascal Hartig',
-    author_email='your-email-here@example.com',
-    description='<enter short description here>',
+    author_email='phartig@rdrei.net',
+    description='Flask integration of gae_mini_profiler',
     long_description=__doc__,
     packages=['flaskext'],
     namespace_packages=['flaskext'],

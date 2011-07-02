@@ -129,7 +129,7 @@ class GAEMiniProfiler(object):
             'js_path': "/_gae_mini_profiler/static/js/profiler.js",
             'css_path': "/_gae_mini_profiler/static/css/profiler.css"
         })
-    
+
     def _render(self, template_name, context):
         """Render a jinja2 template within the application's environment."""
 
