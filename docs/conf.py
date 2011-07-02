@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Flask-GAE-Micro-Profiler documentation build configuration file, created by
+# Flask-GAE-Mini-Profiler documentation build configuration file, created by
 # sphinx-quickstart on Sat Jul  2 14:08:52 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -17,6 +17,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+sys.path.append(os.path.abspath('_themes'))
 
 # -- General configuration -----------------------------------------------------
 
@@ -40,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Flask-GAE-Micro-Profiler'
+project = u'Flask-GAE-Mini-Profiler'
 copyright = u'2011, Pascal Hartig'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -96,7 +97,10 @@ html_theme = 'flask_small'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'index_logo': False,
+    'github_fork': "passy/flask-gae-mini-profiler"
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = ['_themes']
@@ -164,7 +168,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Flask-GAE-Micro-Profilerdoc'
+htmlhelp_basename = 'Flask-GAE-Mini-Profilerdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -211,6 +215,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'flask-gae-micro-profiler', u'Flask-GAE-Micro-Profiler Documentation',
+    ('index', 'flask-gae-mini-profiler', u'Flask-GAE-Micro-Profiler Documentation',
      [u'Pascal Hartig'], 1)
 ]
