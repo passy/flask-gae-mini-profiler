@@ -6,6 +6,7 @@
     :license: MIT, see LICENSE for more details.
 """
 
+from __future__ import with_statement
 import unittest
 import mock
 import sys
@@ -103,9 +104,48 @@ class MiddlewareTestCase(GAETestCase):
 
             self.assertFalse(middleware.should_profile({'PATH_INFO': ""}))
 
+
+class ExtensionTestCase(GAETestCase):
+
+    def test_response_processing(self, *mocks):
+        from flaskext.gae_mini_profiler import GAEMiniProfiler
+
+        environ_patcher = mock.patch('flaskext.gae_mini_profiler.Environment')
+        middleware_patcher = mock.patch('flaskext.gae_mini_profiler.'
+                                        'GAEMiniProfilerWSGIMiddleware')
+
+        environ_patcher.start()
+        middleware_patcher.start()
+
+        app = mock.Mock()
+        rendering = "GAEMiniProfiler"
+
+        class Response(object):
+            """Mock response"""
+
+            status_code = 200
+            is_sequence = True
+            charset = "utf-8"
+
+            data = u"<body>Hello World!</body>"
+
+
+        with mock.patch_object(GAEMiniProfiler, '_render') as render_mock:
+            render_mock.return_value = rendering
+            ext = GAEMiniProfiler(app)
+
+            new_response = ext._process_response(Response())
+
+        self.assertEquals([u"<body>Hello World!GAEMiniProfiler</body>"],
+                          new_response.response)
+
+        environ_patcher.stop()
+        middleware_patcher.stop()
+
+
 def suite():
     suite = unittest.TestSuite()
-    for case in [FunctionTestCase, MiddlewareTestCase]:
+    for case in [FunctionTestCase, MiddlewareTestCase, ExtensionTestCase]:
         suite.addTest(unittest.makeSuite(case))
 
     return suite

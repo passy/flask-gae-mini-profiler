@@ -92,7 +92,7 @@ class GAEMiniProfiler(object):
         )
 
         # Install the response hook
-        self.app.after_request(self._process_response)
+        app.after_request(self._process_response)
 
         app.add_url_rule(self.PROFILER_URL_PREFIX + "static/<path:filename>",
                          '_gae_mini_profiler.static', self._send_static_file)
