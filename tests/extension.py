@@ -13,7 +13,7 @@ import sys
 import os
 
 # Messy hack to remove google modules from the cache. Unfortunately, google is
-# not using namespaces and thus may be installed multiple times.
+# not using proper namespaces and thus may be installed multiple times.
 try:
     del sys.modules['google']
 except KeyError:
@@ -107,15 +107,23 @@ class MiddlewareTestCase(GAETestCase):
 
 class ExtensionTestCase(GAETestCase):
 
-    def test_response_processing(self, *mocks):
-        from flaskext.gae_mini_profiler import GAEMiniProfiler
 
-        environ_patcher = mock.patch('flaskext.gae_mini_profiler.Environment')
-        middleware_patcher = mock.patch('flaskext.gae_mini_profiler.'
+    def setUp(self):
+        self.environ_patcher = mock.patch('flaskext.gae_mini_profiler.'
+                                          'Environment')
+        self.middleware_patcher = mock.patch('flaskext.gae_mini_profiler.'
                                         'GAEMiniProfilerWSGIMiddleware')
 
-        environ_patcher.start()
-        middleware_patcher.start()
+        self.environ_patcher.start()
+        self.middleware_patcher.start()
+
+    def tearDown(self):
+
+        self.environ_patcher.stop()
+        self.middleware_patcher.stop()
+
+    def test_response_processing(self, *mocks):
+        from flaskext.gae_mini_profiler import GAEMiniProfiler
 
         app = mock.Mock()
         rendering = "GAEMiniProfiler"
@@ -139,8 +147,39 @@ class ExtensionTestCase(GAETestCase):
         self.assertEquals([u"<body>Hello World!GAEMiniProfiler</body>"],
                           new_response.response)
 
-        environ_patcher.stop()
-        middleware_patcher.stop()
+    def test_request_view(self):
+        request_patcher = mock.patch('flaskext.gae_mini_profiler.request',
+                                     spec=True)
+        profiler_patcher = mock.patch('flaskext.gae_mini_profiler.profiler',
+                                      spec=True)
+        jsonify_patcher = mock.patch('flaskext.gae_mini_profiler.jsonify',
+                                     spec=True)
+
+        request = request_patcher.start()
+        profiler = profiler_patcher.start()
+        jsonify = jsonify_patcher.start()
+
+        try:
+            from flaskext.gae_mini_profiler import GAEMiniProfiler
+            properties = ['a', 'b', 'c']
+
+            request_id = mock.Sentinel()
+            request.args = {'request_id': request_id}
+
+            stats = profiler.RequestStats.get.return_value
+            stats.__getattribute__ = lambda x: x
+            profiler.RequestStats.serialized_properties = properties
+            app = mock.Mock()
+            ext = GAEMiniProfiler(app)
+            ext._request_view()
+
+            profiler.RequestStats.get.assertCalledOnceWith(request_id)
+            jsonify.assert_called_once_with(
+                dict(zip(properties, properties)))
+        finally:
+            request_patcher.stop()
+            profiler_patcher.stop()
+            jsonify_patcher.stop()
 
 
 def suite():
