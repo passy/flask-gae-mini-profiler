@@ -1,3 +1,13 @@
+"""
+    gae_mini_profiler
+    ~~~~~~~~~~~~~~~~~
+
+    :copyright: (c) 2011, Ben Kamens
+    :url: https://github.com/kamens/gae_mini_profiler
+    :license: MIT, see LICENSE for more details
+"""
+
+
 import datetime
 import logging
 import os
