@@ -17,6 +17,11 @@ Links
 from setuptools import setup
 
 
+def run_tests():
+    from tests import suite
+    return suite()
+
+
 setup(
     name='Flask-GAE-Mini-Profiler',
     version='0.1',
@@ -26,13 +31,15 @@ setup(
     author_email='phartig@rdrei.net',
     description='Flask integration of gae_mini_profiler',
     long_description=__doc__,
-    packages=['flaskext'],
+    packages=['flaskext', 'flaskext.gae_mini_profiler'],
     namespace_packages=['flaskext'],
     zip_safe=False,
     platforms='any',
     install_requires=[
         'Flask'
     ],
+    test_require=['mock>=0.7'],
+    test_suite="__main__.run_tests",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

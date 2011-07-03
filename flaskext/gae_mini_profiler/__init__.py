@@ -12,7 +12,6 @@
 """
 
 import os
-from google.appengine.api import users
 from flask.helpers import send_from_directory
 from flask import request, jsonify
 from flaskext.gae_mini_profiler import profiler
@@ -47,6 +46,8 @@ class GAEMiniProfilerWSGIMiddleware(profiler.ProfilerWSGIMiddleware):
         not.
         """
 
+        from google.appengine.api import users
+
         # Short-circuit!
         if environ["PATH_INFO"].startswith("/_gae_mini_profiler/"):
             return False
@@ -58,7 +59,7 @@ class GAEMiniProfilerWSGIMiddleware(profiler.ProfilerWSGIMiddleware):
         user = users.get_current_user()
 
         return user and user.email() in \
-                self.flask_app.config['GAEMINIPROFILER_PROFILER_ADMINS']
+                self.flask_app.config['GAEMINIPROFILER_PROFILER_EMAILS']
 
 
 class GAEMiniProfiler(object):

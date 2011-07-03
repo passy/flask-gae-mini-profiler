@@ -1,0 +1,2 @@
+recursive-include flaskext/gae_mini_profiler/static *
+recursive-include flaskext/gae_mini_profiler/templates *
