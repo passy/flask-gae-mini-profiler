@@ -2,10 +2,15 @@
 Flask-GAE-Mini-Profiler
 -----------------------
 
-A drop-in, ubiquitous, production profiling tool for Google App Engine for
-Flask using `gae_mini_profiler
-<http://bjk5.com/post/6944602865/google-app-engine-mini-profiler>`.
+A drop-in, ubiquitous, production profiling tool for `Flask <http://flask.pocoo.org>`_ applications on Google App Engine `gae_mini_profiler
+<http://bjk5.com/post/6944602865/google-app-engine-mini-profiler>`_.
 
+Links
+`````
+
+* `documentation <http://packages.python.org/Flask-GAE-Micro-Profiler>`_
+* `development version
+  <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
 Links
 `````
 
