@@ -13,7 +13,7 @@
 
 import os
 from flask.helpers import send_from_directory
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from flaskext.gae_mini_profiler import profiler
 from jinja2 import Environment, FileSystemLoader
 
@@ -98,6 +98,8 @@ class GAEMiniProfiler(object):
                          '_gae_mini_profiler.static', self._send_static_file)
         app.add_url_rule(self.PROFILER_URL_PREFIX + "request",
                          '_gae_mini_profiler.request', self._request_view)
+        app.add_url_rule(self.PROFILER_URL_PREFIX + "shared",
+                         '_gae_mini_profiler.share', self._share_view)
 
     def _send_static_file(self, filename):
         """Send an internal static file."""
@@ -125,11 +127,15 @@ class GAEMiniProfiler(object):
         return response
 
     def _render_profiler(self):
-        return self._render("includes.html", {
-            'request_id': profiler.request_id,
+        context = self._get_render_context()
+        context['request_id'] = profiler.request_id
+        return self._render("includes.html", context)
+
+    def _get_render_context(self):
+        return {
             'js_path': "/_gae_mini_profiler/static/js/profiler.js",
             'css_path': "/_gae_mini_profiler/static/css/profiler.css"
-        })
+        }
 
     def _render(self, template_name, context):
         """Render a jinja2 template within the application's environment."""
@@ -152,3 +158,15 @@ class GAEMiniProfiler(object):
                     stats.__getattribute__(property)
 
         return jsonify(dict_request_stats)
+
+    def _share_view(self):
+        """Renders the shared stats view."""
+
+        request_id = request.args['request_id']
+
+        if not profiler.RequestStats.get(request_id):
+            return u"Profiler stats no longer available."
+
+        context = self._get_render_context()
+        context['request_id'] = request_id
+        return self._render("shared.html", context)

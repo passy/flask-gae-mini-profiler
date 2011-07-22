@@ -112,7 +112,7 @@ class ExtensionTestCase(GAETestCase):
         self.environ_patcher = mock.patch('flaskext.gae_mini_profiler.'
                                           'Environment')
         self.middleware_patcher = mock.patch('flaskext.gae_mini_profiler.'
-                                        'GAEMiniProfilerWSGIMiddleware')
+                                             'GAEMiniProfilerWSGIMiddleware')
 
         self.environ_patcher.start()
         self.middleware_patcher.start()
@@ -148,6 +148,8 @@ class ExtensionTestCase(GAETestCase):
                           new_response.response)
 
     def test_request_view(self):
+        """Test the request stats view"""
+
         request_patcher = mock.patch('flaskext.gae_mini_profiler.request',
                                      spec=True)
         profiler_patcher = mock.patch('flaskext.gae_mini_profiler.profiler',
@@ -180,6 +182,36 @@ class ExtensionTestCase(GAETestCase):
             request_patcher.stop()
             profiler_patcher.stop()
             jsonify_patcher.stop()
+
+    def test_share_view(self):
+        """Test the share view"""
+
+        profiler_patcher = mock.patch('flaskext.gae_mini_profiler.profiler',
+                                      spec=True)
+        request_patcher = mock.patch('flaskext.gae_mini_profiler.request',
+                                     spec=True)
+
+        profiler = profiler_patcher.start()
+        request = request_patcher.start()
+
+        try:
+            from flaskext.gae_mini_profiler import GAEMiniProfiler
+
+            request_id = mock.Sentinel()
+            request.args = {'request_id': request_id}
+
+            app = mock.Mock()
+            ext = GAEMiniProfiler(app)
+            with mock.patch.object(ext, '_render') as render:
+                ext._share_view()
+
+            profiler.RequestStats.get.assert_called_once_with(request_id)
+            self.assertTrue(1, render.call_count)
+            self.assertEquals(request_id,
+                              render.call_args[0][1]['request_id'])
+        finally:
+            request_patcher.stop()
+            profiler_patcher.stop()
 
 
 def suite():
