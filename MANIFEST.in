@@ -1,4 +1,5 @@
 include Makefile LICENSE
+exclude .gitignore
 recursive-include flaskext/gae_mini_profiler/static *
 recursive-include flaskext/gae_mini_profiler/templates *
 recursive-include tests *
