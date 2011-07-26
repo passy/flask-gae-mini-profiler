@@ -13,7 +13,7 @@
 
 import os
 from flask.helpers import send_from_directory
-from flask import request, jsonify, render_template
+from flask import request, jsonify
 from flaskext.gae_mini_profiler import profiler
 from jinja2 import Environment, FileSystemLoader
 
