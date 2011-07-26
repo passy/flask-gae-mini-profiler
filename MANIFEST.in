@@ -1,2 +1,11 @@
+include Makefile LICENSE
 recursive-include flaskext/gae_mini_profiler/static *
 recursive-include flaskext/gae_mini_profiler/templates *
+recursive-include tests *
+recursive-exclude tests *.pyc
+recursive-exclude tests *.pyo
+recursive-include docs *
+recursive-exclude docs *.pyc
+recursive-exclude docs *.pyo
+prune docs/_build
+prune docs/_themes/.git

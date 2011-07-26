@@ -11,13 +11,6 @@ Links
 * `documentation <http://packages.python.org/Flask-GAE-Micro-Profiler>`_
 * `development version
   <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
-Links
-`````
-
-* `documentation <http://packages.python.org/Flask-GAE-Micro-Profiler>`_
-* `development version
-  <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
-
 """
 from setuptools import setup
 
@@ -43,7 +36,7 @@ setup(
     install_requires=[
         'Flask'
     ],
-    test_require=['mock>=0.7'],
+    tests_require=['mock==0.7'],
     test_suite="__main__.run_tests",
     classifiers=[
         'Development Status :: 4 - Beta',
