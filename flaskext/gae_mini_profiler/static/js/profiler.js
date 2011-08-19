@@ -46,11 +46,11 @@ var GaeMiniProfiler = {
     },
 
     finishFetch: function(data, fShowImmediately) {
-        if (!data || !data.length) return;
+        if (!data || !data.stats.length) return;
 
-        for (var ix = 0; ix < data.length; ix++) {
+        for (var ix = 0; ix < data.stats.length; ix++) {
 
-            var jCorner = this.renderCorner(data[ix]);
+            var jCorner = this.renderCorner(data.stats[ix]);
 
             if (!jCorner.data("attached")) {
                 $('body')

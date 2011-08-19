@@ -146,18 +146,30 @@ class GAEMiniProfiler(object):
     def _request_view(self):
         """Renders the request stats."""
 
-        request_id = request.args['request_id']
-        stats = profiler.RequestStats.get(request_id)
+        request_ids = request.args['request_ids']
 
-        if not stats:
-            return u''
+        stats_list = []
+        for request_id in request_ids.split(','):
+            request_stats = profiler.RequestStats.get(request_id)
 
-        dict_request_stats = {}
-        for property in profiler.RequestStats.serialized_properties:
-            dict_request_stats[property] = \
-                    stats.__getattribute__(property)
+            if request_stats and not request_stats.disabled:
+                dict_request_stats = {}
+                for property in profiler.RequestStats.serialized_properties:
+                    dict_request_stats[property] = \
+                            request_stats.__getattribute__(property)
 
-        return jsonify(dict_request_stats)
+                stats_list.append(dict_request_stats)
+
+                # Don't show temporary redirect profiles more than once
+                # automatically, as they are tied to URL params and may be
+                # copied around easily.
+                if request_stats.temporary_redirect:
+                    request_stats.disabled = True
+                    request_stats.store()
+
+        # For security reasons, we return an object instead of a list as it is
+        # dont in the upstream module.
+        return jsonify(stats=stats_list)
 
     def _share_view(self):
         """Renders the shared stats view."""

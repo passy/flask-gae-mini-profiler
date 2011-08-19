@@ -165,19 +165,27 @@ class ExtensionTestCase(GAETestCase):
             from flaskext.gae_mini_profiler import GAEMiniProfiler
             properties = ['a', 'b', 'c']
 
-            request_id = mock.Sentinel()
-            request.args = {'request_id': request_id}
+            request_ids = ['1', '2', '3']
+            request.args = {'request_ids': ','.join(request_ids)}
 
             stats = profiler.RequestStats.get.return_value
             stats.__getattribute__ = lambda x: x
+            stats.disabled = False
+            stats.temporary_redirect = False
+
             profiler.RequestStats.serialized_properties = properties
             app = mock.Mock()
             ext = GAEMiniProfiler(app)
             ext._request_view()
 
-            profiler.RequestStats.get.assertCalledOnceWith(request_id)
-            jsonify.assert_called_once_with(
-                dict(zip(properties, properties)))
+            self.assertEquals(len(request_ids),
+                              profiler.RequestStats.get.call_count)
+
+            expected_result = []
+            for id in request_ids:
+                expected_result.append(dict(zip(properties, properties)))
+
+            jsonify.assert_called_once_with(stats=expected_result)
         finally:
             request_patcher.stop()
             profiler_patcher.stop()
