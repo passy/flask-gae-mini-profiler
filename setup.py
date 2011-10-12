@@ -33,7 +33,7 @@ setup(
     packages=['flaskext', 'flaskext.gae_mini_profiler'],
     package_data = {
         'flaskext.gae_mini_profiler': [
-            'flaskext/gae_mini_profiler/templates/*'
+            'templates/*'
         ]
     },
     namespace_packages=['flaskext'],
