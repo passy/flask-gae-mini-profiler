@@ -23,7 +23,7 @@ def run_tests():
 
 setup(
     name='Flask-GAE-Mini-Profiler',
-    version='0.1.1',
+    version='0.1.1-dev',
     url='http://packages.python.org/Flask-GAE-Micro-Profiler',
     license='MIT',
     author='Pascal Hartig',
@@ -31,6 +31,13 @@ setup(
     description='Flask integration of gae_mini_profiler',
     long_description=__doc__,
     packages=['flaskext', 'flaskext.gae_mini_profiler'],
+    package_data = {
+        'flaskext.gae_mini_profiler': [
+            'templates/*',
+            'static/js/*',
+            'static/css/*',
+        ]
+    },
     namespace_packages=['flaskext'],
     zip_safe=False,
     platforms='any',
