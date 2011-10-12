@@ -31,6 +31,11 @@ setup(
     description='Flask integration of gae_mini_profiler',
     long_description=__doc__,
     packages=['flaskext', 'flaskext.gae_mini_profiler'],
+    package_data = {
+        'flaskext.gae_mini_profiler': [
+            'flaskext/gae_mini_profiler/templates/*'
+        ]
+    },
     namespace_packages=['flaskext'],
     zip_safe=False,
     platforms='any',
