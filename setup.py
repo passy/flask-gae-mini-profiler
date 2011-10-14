@@ -9,9 +9,9 @@ A drop-in, ubiquitous, production profiling tool for
 Links
 `````
 
-* `documentation <http://packages.python.org/Flask-GAE-Micro-Profiler>`_
+* `documentation <http://packages.python.org/Flask-GAE-Mini-Profiler>`_
 * `development version
-  <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Micro-Profiler-dev>`_
+  <http://github.com/passy/flask-gae-mini-profiler/zipball/master#egg=Flask-GAE-Mini-Profiler-dev>`_
 """
 from setuptools import setup
 
@@ -24,7 +24,7 @@ def run_tests():
 setup(
     name='Flask-GAE-Mini-Profiler',
     version='0.1.2',
-    url='http://packages.python.org/Flask-GAE-Micro-Profiler',
+    url='http://packages.python.org/Flask-GAE-Mini-Profiler',
     license='MIT',
     author='Pascal Hartig',
     author_email='phartig@rdrei.net',
