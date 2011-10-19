@@ -28,6 +28,7 @@ keep your libraries in a seperate folder.
 ::
 
    myapp/
+      pkg_resources.py
       lib/
          flask/
          flaskext/
@@ -35,11 +36,15 @@ keep your libraries in a seperate folder.
             gae_mini_profiler/
 
 
-The ``__init__.py`` must contain the following line to declare the folder a
+The ``__init__.py`` must contain the following line to declare the folder as
 namespace::
 
    __import__('pkg_resources').declare_namespace(__name__)
-   
+
+You can obtain a copy of `pkg_resources.py
+<https://raw.github.com/kamalgill/flask-appengine-template/master/src/pkg_resources.py>`_
+from the `flask-appengine-template`_ which is advisable in general when working
+with Flask on Google App Engine.
 
 Now all you got to do is make sure that your ``lib`` folder is added to the
 Python library path before any packages are imported. Add a snippet like this
@@ -55,6 +60,8 @@ before your imports::
    )
    sys.path.insert(0, PACKAGE_DIR)
 
+
+.. _flask-appengine-template: https://github.com/kamalgill/flask-appengine-template
 
 How to Use
 ==========
