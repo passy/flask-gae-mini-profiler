@@ -23,7 +23,7 @@ def run_tests():
 
 setup(
     name='Flask-GAE-Mini-Profiler',
-    version='0.1.2',
+    version='0.2.dev.1',
     url='http://packages.python.org/Flask-GAE-Mini-Profiler',
     license='MIT',
     author='Pascal Hartig',

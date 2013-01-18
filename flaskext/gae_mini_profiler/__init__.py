@@ -128,7 +128,7 @@ class GAEMiniProfiler(object):
 
     def _render_profiler(self):
         context = self._get_render_context()
-        context['request_id'] = profiler.request_id
+        context['request_id'] = profiler.CurrentRequestId.get()
         return self._render("includes.html", context)
 
     def _get_render_context(self):
