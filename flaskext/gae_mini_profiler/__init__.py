@@ -7,13 +7,13 @@
     on `gae_mini_profiler <https://github.com/kamens/gae_mini_profiler>` by
     `Ben Kamens <http://bjk5.com/>`.
 
-    :copyright: (c) 2011 by Pascal Hartig.
+    :copyright: 2011 - 2013 by Pascal Hartig
     :license: MIT, see LICENSE for more details.
 """
 
 import os
 from flask.helpers import send_from_directory
-from flask import request, jsonify
+from flask import request, jsonify, json
 from flaskext.gae_mini_profiler import profiler
 from jinja2 import Environment, FileSystemLoader
 
@@ -51,6 +51,10 @@ class GAEMiniProfilerWSGIMiddleware(profiler.ProfilerWSGIMiddleware):
         # Short-circuit!
         if environ["PATH_INFO"].startswith("/_gae_mini_profiler/"):
             return False
+
+        # Always profile in development mode
+        if profiler.dev_server:
+            return True
 
         if self.flask_app.config['GAEMINIPROFILER_PROFILER_ADMINS'] and \
            users.is_current_user_admin():
@@ -90,6 +94,7 @@ class GAEMiniProfiler(object):
                 os.path.join(base_dir, 'templates')
             )
         )
+        self.jinja_env.filters['tojson'] = json.htmlsafe_dumps
 
         # Install the response hook
         app.after_request(self._process_response)
@@ -134,7 +139,9 @@ class GAEMiniProfiler(object):
     def _get_render_context(self):
         return {
             'js_path': "/_gae_mini_profiler/static/js/profiler.js",
-            'css_path': "/_gae_mini_profiler/static/css/profiler.css"
+            'css_path': "/_gae_mini_profiler/static/css/profiler.css",
+            # TODO: Make configureable
+            'show_immediately': True
         }
 
     def _render(self, template_name, context):
@@ -167,8 +174,8 @@ class GAEMiniProfiler(object):
                     request_stats.disabled = True
                     request_stats.store()
 
-        # For security reasons, we return an object instead of a list as it is
-        # dont in the upstream module.
+        # For security reasons, we return an object instead of a list, even
+        # though upstream doesn't do this.
         return jsonify(stats=stats_list)
 
     def _share_view(self):
@@ -177,7 +184,7 @@ class GAEMiniProfiler(object):
         request_id = request.args['request_id']
 
         if not profiler.RequestStats.get(request_id):
-            return u"Profiler stats no longer available."
+            return u"Profiler stats no longer available.", 404
 
         context = self._get_render_context()
         context['request_id'] = request_id

@@ -94,7 +94,7 @@ class Mode(object):
         if "HTTP_G_M_P_MODE" in environ:
             mode = environ["HTTP_G_M_P_MODE"]
         else:
-            mode = cookies.get_cookie_value("g-m-p-mode")
+            mode = cookie.get_cookie_value("g-m-p-mode")
 
         if (mode not in [
                 Mode.SIMPLE,
@@ -383,7 +383,7 @@ class RequestProfiler(object):
                 # Note that we don't import appstats_profiler at the top of
                 # this file so we don't bring in a lot of imports for users who
                 # don't have the profiler enabled.
-                from gae_mini_profiler import appstats_profiler
+                from flask.ext.gae_mini_profiler import appstats_profiler
                 self.appstats_prof = appstats_profiler.Profile()
                 app = self.appstats_prof.wrap(app)
 
@@ -400,7 +400,7 @@ class RequestProfiler(object):
                 # Note that we don't import sampling_profiler at the top of
                 # this file so we don't bring in a lot of imports for users who
                 # don't have the profiler enabled.
-                from gae_mini_profiler import sampling_profiler
+                from flask.ext.gae_mini_profiler import sampling_profiler
                 self.sampling_prof = sampling_profiler.Profile()
                 result_fxn_wrapper = self.sampling_prof.run
 
@@ -409,7 +409,7 @@ class RequestProfiler(object):
                 # Note that we don't import instrumented_profiler at the top of
                 # this file so we don't bring in a lot of imports for users who
                 # don't have the profiler enabled.
-                from gae_mini_profiler import instrumented_profiler
+                from flask.ext.gae_mini_profiler import instrumented_profiler
                 self.instrumented_prof = instrumented_profiler.Profile()
                 result_fxn_wrapper = self.instrumented_prof.run
 
@@ -497,7 +497,7 @@ class ProfilerWSGIMiddleware(object):
 
         # Never profile calls to the profiler itself to avoid endless recursion.
         if (not self.should_profile(environ) or
-            environ.get("PATH_INFO", "").startswith("/gae_mini_profiler/")):
+            environ.get("PATH_INFO", "").startswith("/_gae_mini_profiler/")):
             result = self.app(environ, start_response)
             for value in result:
                 yield value
