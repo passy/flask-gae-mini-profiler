@@ -101,6 +101,8 @@ class GAEMiniProfiler(object):
 
         app.add_url_rule(self.PROFILER_URL_PREFIX + "static/<path:filename>",
                          '_gae_mini_profiler.static', self._send_static_file)
+        app.add_url_rule(self.PROFILER_URL_PREFIX + "request/log",
+                         '_gae_mini_profiler.request', self._request_log_view)
         app.add_url_rule(self.PROFILER_URL_PREFIX + "request",
                          '_gae_mini_profiler.request', self._request_view)
         app.add_url_rule(self.PROFILER_URL_PREFIX + "shared",
@@ -149,6 +151,12 @@ class GAEMiniProfiler(object):
 
         template = self.jinja_env.get_template(template_name)
         return template.render(**context)
+
+    def _log_view(self):
+        """Renders additional request log stats."""
+
+        # TODO: Reimplement .profiler.RequestLogHandler
+        raise NotImplementedError()
 
     def _request_view(self):
         """Renders the request stats."""
