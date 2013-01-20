@@ -44,7 +44,7 @@ setup(
     install_requires=[
         'Flask'
     ],
-    tests_require=['mock==0.7'],
+    tests_require=['mock==1.0.1'],
     test_suite="__main__.run_tests",
     classifiers=[
         'Development Status :: 4 - Beta',
