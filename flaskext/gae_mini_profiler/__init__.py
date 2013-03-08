@@ -109,7 +109,9 @@ class GAEMiniProfiler(object):
     def _process_response(self, response):
         """Process response and append the profiler code if appropriate."""
 
-        if response.status_code != 200 or not response.is_sequence:
+        if response.status_code != 200 or response.mimetype != "text/html" or \
+            not response.is_sequence:
+                
             return response
 
         response_html = response.data.decode(response.charset)
